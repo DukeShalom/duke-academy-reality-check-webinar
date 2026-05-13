@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reality Check Summit - Duke Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep:    #060b14;
+      --bg-card:    #0c1422;
+      --bg-card2:   #0f1928;
+      --off-white:  #F5F8FA;
+      --cyan:       #00d4e8;
+      --cyan-dim:   #00aabb;
+      --coral:      #FF5F4B;
+      --coral-dim:  #e04535;
+      --muted:      #8ca3bf;
+      --border:     rgba(255,255,255,0.07);
+      --gradient:   linear-gradient(90deg, #00d4e8, #0070f3, #9b59b6, #FF5F4B);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--off-white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── subtle noise/grain overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: .4;
+    }
+
+    /* ── ambient blobs ── */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: .18;
+    }
+    .blob-1 { width: 600px; height: 600px; background: #0070f3; top: -200px; left: -150px; }
+    .blob-2 { width: 500px; height: 500px; background: #9b59b6; top: 30%; right: -200px; }
+    .blob-3 { width: 400px; height: 400px; background: #00d4e8; bottom: 10%; left: 20%; }
+
+    /* ── page wrapper ── */
+    .page { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+    /* ════════════════════
+       TOP BAR
+    ════════════════════ */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo-wrap { display: flex; align-items: center; gap: 12px; }
+
+    /* Duke Academy SVG logo mark - abstract blue gradient symbol */
+    .logo-mark {
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+    }
+
+    .logo-name {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+    .logo-name span:first-child {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--off-white);
+    }
+    .logo-name span:last-child {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      font-size: 10.5px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .free-badge {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 11px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--coral);
+      padding: 5px 14px;
+      border-radius: 999px;
+      box-shadow: 0 0 20px rgba(255,95,75,.35);
+    }
+
+    /* ════════════════════
+       HERO
+    ════════════════════ */
+    .hero {
+      text-align: center;
+      padding: 64px 0 48px;
+    }
+
+    .pre-label {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 18px;
+      display: block;
+    }
+
+    .summit-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(0,212,232,.28);
+      border-radius: 999px;
+      padding: 7px 18px;
+      margin-bottom: 32px;
+      background: rgba(0,212,232,.06);
+    }
+    .summit-badge .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:.5; transform:scale(.7); }
+    }
+    .summit-badge span {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--cyan);
+    }
+
+    .hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: clamp(34px, 6vw, 64px);
+      line-height: 1.1;
+      color: var(--off-white);
+      margin-bottom: 20px;
+      letter-spacing: -.5px;
+    }
+    .hero-headline em {
+      font-style: italic;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      font-size: clamp(15px, 2.2vw, 18px);
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 40px;
+      line-height: 1.75;
+    }
+    .tagline strong {
+      color: var(--off-white);
+      font-weight: 500;
+    }
+
+    /* ── mini event chips ── */
+    .hero-chips {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--off-white);
+    }
+    .chip svg { flex-shrink: 0; }
+
+    /* ════════════════════
+       GRADIENT DIVIDER
+    ════════════════════ */
+    .divider {
+      height: 1px;
+      background: var(--gradient);
+      border-radius: 999px;
+      margin: 40px 0;
+      opacity: .7;
+    }
+
+    /* ════════════════════
+       TOPICS
+    ════════════════════ */
+    .section-label {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 10.5px;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .topics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .topics-grid { grid-template-columns: 1fr; }
+    }
+
+    .topic-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s ease, border-color .25s ease;
+    }
+    .topic-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(0,212,232,.25);
+    }
+    .topic-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .topic-card:nth-child(1)::before { background: linear-gradient(90deg,#00d4e8,#0070f3); }
+    .topic-card:nth-child(2)::before { background: linear-gradient(90deg,#9b59b6,#FF5F4B); }
+
+    .day-number {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 10px;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 12px;
+    }
+    .topic-card:nth-child(2) .day-number { color: #c084fc; }
+
+    .topic-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 20px;
+      line-height: 1.3;
+      color: var(--off-white);
+    }
+
+    /* ════════════════════
+       SPEAKERS
+    ════════════════════ */
+    .speakers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 640px) {
+      .speakers-grid { grid-template-columns: 1fr; }
+    }
+    @media (min-width: 641px) and (max-width: 820px) {
+      .speakers-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .speaker-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 20px 24px;
+      text-align: center;
+      transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+    .speaker-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0,212,232,.2);
+      box-shadow: 0 12px 40px rgba(0,0,0,.4);
+    }
+
+    .avatar-wrap {
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(135deg, #0f2044, #1a3060);
+      border: 2px solid rgba(0,212,232,.2);
+      box-shadow: 0 0 24px rgba(0,112,243,.25);
+    }
+    .avatar-wrap svg { width: 100%; height: 100%; }
+
+    .speaker-name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 16px;
+      color: var(--off-white);
+      margin-bottom: 6px;
+    }
+    .speaker-role {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ════════════════════
+       EVENT DETAILS
+    ════════════════════ */
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 580px) {
+      .details-grid { grid-template-columns: 1fr; }
+    }
+
+    .detail-card {
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 18px;
+      text-align: center;
+    }
+    .detail-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+    }
+    .detail-icon.cyan  { background: rgba(0,212,232,.1); }
+    .detail-icon.coral { background: rgba(255,95,75,.1); }
+    .detail-icon.purple{ background: rgba(155,89,182,.1);}
+
+    .detail-label {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 9.5px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .detail-value {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--off-white);
+      line-height: 1.5;
+    }
+
+    /* ════════════════════
+       CTA BUTTON
+    ════════════════════ */
+    .cta-wrap {
+      padding: 12px 0 16px;
+    }
+
+    .cta-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 22px 28px;
+      border-radius: 14px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(13px, 2.5vw, 16px);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      background: linear-gradient(100deg, #FF5F4B 0%, #e91e8c 40%, #0070f3 80%, #00d4e8 100%);
+      background-size: 200% 100%;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background-position .5s ease, transform .2s ease, box-shadow .3s ease;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.06),
+        0 8px 40px rgba(255,95,75,.35),
+        0 2px 8px rgba(0,0,0,.4);
+      animation: gradShift 4s ease infinite alternate;
+    }
+    @keyframes gradShift {
+      0%   { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.1),
+        0 12px 48px rgba(255,95,75,.45),
+        0 4px 12px rgba(0,0,0,.5);
+    }
+    .cta-btn:active { transform: translateY(0); }
+
+    .cta-btn .arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.18);
+      flex-shrink: 0;
+      transition: transform .2s ease;
+    }
+    .cta-btn:hover .arrow { transform: translateX(3px); }
+
+    .cta-sub {
+      text-align: center;
+      font-size: 11.5px;
+      font-weight: 300;
+      color: var(--muted);
+      margin-top: 10px;
+      letter-spacing: .05em;
+    }
+    .cta-sub span { color: var(--cyan); font-weight: 500; }
+
+    /* ════════════════════
+       FOOTER
+    ════════════════════ */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 22px 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .footer-venue {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-venue svg { color: var(--cyan); flex-shrink: 0; }
+    .footer-venue span {
+      font-size: 12.5px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+    .footer-venue strong { color: var(--off-white); font-weight: 500; }
+
+    .footer-ig {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 12.5px;
+      font-weight: 400;
+      transition: color .2s;
+    }
+    .footer-ig:hover { color: var(--off-white); }
+    .footer-ig svg { flex-shrink: 0; }
+
+    /* ── sections spacing ── */
+    section { padding: 40px 0; }
+    section + section { padding-top: 0; }
+
+    /* ════════════════════
+       CREATEOS BADGE
+    ════════════════════ */
+    #createos-badge {
+      position: fixed;
+      bottom: 12px;
+      right: 12px;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 999px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+      font-size: 11px;
+      font-weight: 500;
+      color: #374151;
+      text-decoration: none;
+      font-family: system-ui, sans-serif;
+    }
+    #createos-badge:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+    #createos-badge img { width: 14px; height: 14px; }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <div class="page">
+
+    <!-- ══ TOP BAR ══ -->
+    <header class="topbar">
+      <div class="logo-wrap">
+        <!-- Duke Academy actual logo PNG -->
+        <img
+          class="logo-mark"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAApQAAAOOCAYAAAC+9YJ1AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAMsAAADLAAShkWtsAAP+lSURBVHhe7P0FeBzXm+YNfzvvvrM7O7vvzuzO7n94/pDEFjOYA05sB53EDnPi2AGHmTlmZmZLssDMFpqZmZlRtmXL9v3dz6lTrepWy5AYWtLzy3Vfp7olq2RXdZ1fnlPn1P9PURSlsgPgPzN/vHTpUiTbO9k2Y/sS8x23f2UGe5IXkEXMtoCc5Z/1wdelAV+XLGMCf9Zwxt1Pe/5R2f9rzFPcvpOJZf7I/Ff7qyuKoiiKoig3EorX31kJa0op+4jpzoxmRN5E6ETsSvn1Sof83vb3X8XI32cMI38/+Xs2YxL5bX9n/ykURVEURVGUYFCa/jcTxzzMvEWBasN2FFPEbGcuGvuqxvDfYBczl0lj2jPvMI8yicwf7D+loiiKoihK1YZeJEPSsRSg5xiRognMLmNMyu+C/477mBlMZ0aG16WyqUPqiqIoiqJUTigy/y+FJpJ5jPmcr4ewleraEZEf5ebAf++TjNwbOoL5hnmSieOX/ps9VIqiKIqiKKEBJeU2SspLbOXeP7kP8JgxGiUk4fE5xcxjejOt+FZNeygVRVEURVFuPBSQ/8XczXzADGNWOZqiVGZ4HDcwadz8jG1jtv9oD7miKIqiKMrvg3LxH5SLpowsfTOW2c5tpYrD47yXmcz8wjzB3G5PCUVRFEVRlMtDl/jvlAdZrkYmd8iSPJVyOR7l+sNzQZY2kmFyWU/zH+wpoyiKoiiKUt2hGPyXRhYB/5wZxxyQeFCUK3Cc58pUtlK5bsT2f9pTSlEURVGU6gAF4A7mBUaqTcuMHijK74DnaSsziBnZyFzFDHsoFUVRFEUJBfb3/51pyI7+K2YSo8v3KDcMno9KY2YmP7IHFFL7PaWVOqTuKIoiqIoSmaIMP+XQhPJPMZ8ztdD2CrVrSMiP8rNgf/eJxm5N3QE8w3zJBPHL/03e6gURVEURVFCA0rKbZSUl9jKvX9yH+AxYzRKSMLjc4qZx/RmWvGt2vZQKoqiKIqi3HgogP8Lu3c+oBfWfSEA+uRpMfYnJAH3YNRilhbkbeSJBJQcE8LyZBhFSRoCSAWagrVLNMgHxiJ5aVTmrQSjUkKC9VLkFJwFp7oIiTiI+2l0jz5XLcXEEoqbm5ubpHSM9IKKFBQW9gLy5IyBHFjwvkIbFCPdJ/i4QckNHbMzIiH8hKOQMF2cTHSdSaVFSSrRp6MKZMQD9m9QcPWHb7J2YLKymVSqWISKwbJVvMi+c21YrB0jHmQ0tkopBuPUh5ssBIoqCJ3pBJiiFsgONULCLGqJIc2WMRiqIoiqLkGGTv/4ZOHEPJAl1JtfBwLRDj4b94dL8AkQM1U4LDVAMAH2wV5WKAbS77VAAAAAElFTkSuQmCC"
+          alt="Duke Academy"
+          style="width:44px;height:44px;object-fit:contain;flex-shrink:0;"
+        />
+        <div class="logo-name">
+          <span>Duke Academy</span>
+        </div>
+      </div>
+      <div class="free-badge">FREE</div>
+    </header>
+
+    <!-- ══ HERO ══ -->
+    <section class="hero">
+      <span class="pre-label">Presents a 2-Day Event</span>
+
+      <div class="summit-badge">
+        <span class="dot"></span>
+        <span>The Reality Check Webinar</span>
+      </div>
+
+      <h1 class="hero-headline">
+        How Ready Are <em>You?</em>
+      </h1>
+
+      <p class="tagline">
+        The truth <strong>students &amp; fresh graduates</strong> need to hear,<br>
+        before it's too late.
+      </p>
+
+      <!-- mini chips -->
+      <div class="hero-chips">
+        <div class="chip">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00d4e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Mon 18 &amp; Tue 19 June 2026
+        </div>
+        <div class="chip">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FF5F4B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          8:00 PM WAT
+        </div>
+        <div class="chip">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Duke Academy Community
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ GRADIENT DIVIDER ══ -->
+    <div class="divider"></div>
+
+    <!-- ══ TOPICS ══ -->
+    <section>
+      <div class="section-label">What You'll Discover</div>
+      <div class="topics-grid">
+
+        <div class="topic-card">
+          <div class="day-number">Day 01 - Monday</div>
+          <div class="topic-title">Bridging the gap between education and the real world.</div>
+        </div>
+
+        <div class="topic-card">
+          <div class="day-number">Day 02 - Tuesday</div>
+          <div class="topic-title">What it takes to start your tech journey and stand out so well, the jobs come looking for you.</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ SPEAKERS ══ -->
+    <section>
+      <div class="section-label">Meet the Speakers</div>
+      <div class="speakers-grid">
+
+        <!-- Femi Jolayemi - bearded male with tie -->
+        <div class="speaker-card">
+          <div class="avatar-wrap">
+            <svg viewBox="0 0 82 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="av1bg" x1="0" y1="0" x2="82" y2="82" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#0d2a55"/>
+                  <stop offset="100%" stop-color="#1a4080"/>
+                </linearGradient>
+                <linearGradient id="av1skin" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#c68642"/>
+                  <stop offset="100%" stop-color="#a0622a"/>
+                </linearGradient>
+              </defs>
+              <rect width="82" height="82" fill="url(#av1bg)"/>
+              <!-- shirt & tie -->
+              <path d="M10 82 Q10 62 41 58 Q72 62 72 82 Z" fill="#1e3a6e"/>
+              <path d="M36 58 L41 68 L46 58 L43 55 L39 55 Z" fill="#00d4e8"/>
+              <path d="M39 55 L43 55 L41 58 Z" fill="#0099aa"/>
+              <!-- neck -->
+              <rect x="36" y="50" width="10" height="10" rx="3" fill="#c68642"/>
+              <!-- head -->
+              <ellipse cx="41" cy="36" rx="16" ry="18" fill="#c68642"/>
+              <!-- hair -->
+              <path d="M25 30 Q26 18 41 17 Q56 18 57 30 Q55 22 41 21 Q27 22 25 30 Z" fill="#1a0f00"/>
+              <!-- ear -->
+              <ellipse cx="25.5" cy="36" rx="2.5" ry="3.5" fill="#b07530"/>
+              <ellipse cx="56.5" cy="36" rx="2.5" ry="3.5" fill="#b07530"/>
+              <!-- eyes -->
+              <ellipse cx="34.5" cy="34" rx="2.8" ry="2" fill="#1a0f00"/>
+              <ellipse cx="47.5" cy="34" rx="2.8" ry="2" fill="#1a0f00"/>
+              <circle cx="35.3" cy="33.4" r=".7" fill="#fff" opacity=".6"/>
+              <circle cx="48.3" cy="33.4" r=".7" fill="#fff" opacity=".6"/>
+              <!-- beard -->
+              <path d="M27 43 Q29 52 41 54 Q53 52 55 43 Q50 47 41 47 Q32 47 27 43Z" fill="#1a0f00"/>
+              <path d="M34 44 Q41 46 48 44" stroke="#1a0f00" stroke-width="1.5" fill="none"/>
+              <!-- nose -->
+              <path d="M40 38 Q38 42 40 43 Q42 43 44 42 Q42 38 40 38Z" fill="#b07530"/>
+              <!-- eyebrows -->
+              <path d="M31 30.5 Q34.5 29 38 30.5" stroke="#1a0f00" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+              <path d="M44 30.5 Q47.5 29 51 30.5" stroke="#1a0f00" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+              <!-- mustache -->
+              <path d="M36 42 Q41 44 46 42" stroke="#1a0f00" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+          <div class="speaker-name">Femi Jolayemi</div>
+          <div class="speaker-role">Founder, Mental Shift</div>
+        </div>
+
+        <!-- Baruch - bearded male with tie -->
+        <div class="speaker-card">
+          <div class="avatar-wrap">
+            <svg viewBox="0 0 82 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="av2bg" x1="0" y1="0" x2="82" y2="82" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#1a0d30"/>
+                  <stop offset="100%" stop-color="#2d1250"/>
+                </linearGradient>
+              </defs>
+              <rect width="82" height="82" fill="url(#av2bg)"/>
+              <!-- shirt & tie -->
+              <path d="M10 82 Q10 62 41 58 Q72 62 72 82 Z" fill="#2d1a5e"/>
+              <path d="M36 58 L41 70 L46 58 L43 55 L39 55 Z" fill="#FF5F4B"/>
+              <path d="M39 55 L43 55 L41 58 Z" fill="#cc3a28"/>
+              <!-- neck -->
+              <rect x="36" y="50" width="10" height="10" rx="3" fill="#d4956a"/>
+              <!-- head -->
+              <ellipse cx="41" cy="36" rx="16" ry="18" fill="#d4956a"/>
+              <!-- hair - medium brown -->
+              <path d="M25 30 Q26 18 41 17 Q56 18 57 30 Q55 22 41 21 Q27 22 25 30 Z" fill="#3d1c00"/>
+              <!-- fade sides -->
+              <path d="M25 30 Q25 24 28 22 Q26 26 26 32 Z" fill="#2a1200"/>
+              <path d="M57 30 Q57 24 54 22 Q56 26 56 32 Z" fill="#2a1200"/>
+              <!-- ears -->
+              <ellipse cx="25.5" cy="36" rx="2.5" ry="3.5" fill="#c08050"/>
+              <ellipse cx="56.5" cy="36" rx="2.5" ry="3.5" fill="#c08050"/>
+              <!-- eyes -->
+              <ellipse cx="34.5" cy="34" rx="2.8" ry="2" fill="#1a0800"/>
+              <ellipse cx="47.5" cy="34" rx="2.8" ry="2" fill="#1a0800"/>
+              <circle cx="35.3" cy="33.4" r=".7" fill="#fff" opacity=".6"/>
+              <circle cx="48.3" cy="33.4" r=".7" fill="#fff" opacity=".6"/>
+              <!-- thick beard -->
+              <path d="M26 42 Q27 54 41 56 Q55 54 56 42 Q50 48 41 49 Q32 48 26 42Z" fill="#3d1c00"/>
+              <path d="M29 44 Q35 48 41 48 Q47 48 53 44" stroke="#2a1200" stroke-width="1" fill="none"/>
+              <!-- nose -->
+              <path d="M40 38 Q38 42 40 43 Q42 43 44 42 Q42 38 40 38Z" fill="#c08050"/>
+              <!-- eyebrows - thick -->
+              <path d="M31 30.5 Q34.5 28.5 38 30.5" stroke="#3d1c00" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+              <path d="M44 30.5 Q47.5 28.5 51 30.5" stroke="#3d1c00" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+              <!-- mustache -->
+              <path d="M35.5 42 Q41 44.5 46.5 42" stroke="#3d1c00" stroke-width="2" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+          <div class="speaker-name">Baruch</div>
+          <div class="speaker-role">Ambassador, NodeOps</div>
+        </div>
+
+        <!-- Shalom Ifeanyi - bearded male with glasses -->
+        <div class="speaker-card">
+          <div class="avatar-wrap">
+            <svg viewBox="0 0 82 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="av3bg" x1="0" y1="0" x2="82" y2="82" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#062510"/>
+                  <stop offset="100%" stop-color="#0d3d20"/>
+                </linearGradient>
+              </defs>
+              <rect width="82" height="82" fill="url(#av3bg)"/>
+              <!-- shirt -->
+              <path d="M10 82 Q10 62 41 58 Q72 62 72 82 Z" fill="#0d3d20"/>
+              <!-- collar -->
+              <path d="M37 58 L41 62 L45 58 L43 55 L39 55 Z" fill="#fff" opacity=".9"/>
+              <path d="M39 55 L41 58 L43 55 Z" fill="#ccc"/>
+              <!-- neck -->
+              <rect x="36" y="50" width="10" height="10" rx="3" fill="#8d5524"/>
+              <!-- head - deeper brown -->
+              <ellipse cx="41" cy="36" rx="16" ry="18" fill="#8d5524"/>
+              <!-- hair - tight/low cut -->
+              <path d="M25 30 Q25 18 41 17 Q57 18 57 30 Q56 24 41 22 Q26 24 25 30Z" fill="#0a0500"/>
+              <!-- ears -->
+              <ellipse cx="25.5" cy="36" rx="2.5" ry="3.5" fill="#7a4a1e"/>
+              <ellipse cx="56.5" cy="36" rx="2.5" ry="3.5" fill="#7a4a1e"/>
+              <!-- glasses frame -->
+              <rect x="29" y="31" width="10" height="8" rx="3" stroke="#1a1a1a" stroke-width="1.6" fill="rgba(0,180,200,0.08)"/>
+              <rect x="43" y="31" width="10" height="8" rx="3" stroke="#1a1a1a" stroke-width="1.6" fill="rgba(0,180,200,0.08)"/>
+              <line x1="39" y1="35" x2="43" y2="35" stroke="#1a1a1a" stroke-width="1.3"/>
+              <line x1="23.5" y1="33" x2="29" y2="34" stroke="#1a1a1a" stroke-width="1.3"/>
+              <line x1="53" y1="34" x2="58.5" y2="33" stroke="#1a1a1a" stroke-width="1.3"/>
+              <!-- eyes behind glasses -->
+              <ellipse cx="34" cy="35" rx="2.2" ry="1.6" fill="#0a0500"/>
+              <ellipse cx="48" cy="35" rx="2.2" ry="1.6" fill="#0a0500"/>
+              <circle cx="34.8" cy="34.5" r=".6" fill="#fff" opacity=".5"/>
+              <circle cx="48.8" cy="34.5" r=".6" fill="#fff" opacity=".5"/>
+              <!-- beard + goatee -->
+              <path d="M27 43 Q28 53 41 55 Q54 53 55 43 Q50 48 41 49 Q32 48 27 43Z" fill="#0a0500"/>
+              <!-- nose -->
+              <path d="M40 38 Q38 43 41 44 Q44 43 42 38Z" fill="#7a4a1e"/>
+              <!-- eyebrows -->
+              <path d="M30 29.5 Q34 28 38 29.5" stroke="#0a0500" stroke-width="2" stroke-linecap="round" fill="none"/>
+              <path d="M44 29.5 Q48 28 52 29.5" stroke="#0a0500" stroke-width="2" stroke-linecap="round" fill="none"/>
+              <!-- mustache -->
+              <path d="M36 43 Q41 45 46 43" stroke="#0a0500" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+          <div class="speaker-name">Shalom Ifeanyi</div>
+          <div class="speaker-role">Program Coordinator, Duke Academy</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ EVENT DETAILS ══ -->
+    <section>
+      <div class="section-label">Event Details</div>
+      <div class="details-grid">
+
+        <div class="detail-card">
+          <div class="detail-icon cyan">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00d4e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="detail-label">Date</div>
+          <div class="detail-value">Monday 18th &amp;<br>Tuesday 19th<br>June 2026</div>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-icon coral">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF5F4B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="detail-label">Time</div>
+          <div class="detail-value">8:00 PM WAT<br><small style="color:var(--muted);font-size:11px;">West Africa Time</small></div>
+        </div>
+
+        <div class="detail-card">
+          <div class="detail-icon purple">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="detail-label">Venue</div>
+          <div class="detail-value">Duke Academy<br>Community<br><small style="color:var(--muted);font-size:11px;">Online · WhatsApp</small></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══ CTA ══ -->
+    <section style="padding-top:8px;">
+      <div class="cta-wrap">
+        <a
+          class="cta-btn"
+          href="https://chat.whatsapp.com/H46mvTUYF6w9i8Fw8WmaY4?mode=hqctcli"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          REGISTER NOW - IT'S COMPLETELY FREE
+          <span class="arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </span>
+        </a>
+        <p class="cta-sub">No credit card required · <span>100% Free</span> · 2 days of life-changing insights</p>
+      </div>
+    </section>
+
+    <!-- ══ FOOTER ══ -->
+    <footer>
+      <div class="footer-venue">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00d4e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span><strong>Duke Academy Community</strong> · June 18-19, 2026 · 9 PM WAT</span>
+      </div>
+      <a class="footer-ig" href="https://www.Instagram.com/duke__academy" target="_blank" rel="noopener noreferrer">
+        <!-- Instagram icon -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+        </svg>
+        @duke_academy
+      </a>
+    </footer>
+
+  </div><!-- /page -->
+
+  <!-- CreateOS Badge -->
+  <a id="createos-badge" href="https://createos.sh/app" target="_blank" rel="noopener noreferrer">
+    <img src="https://nodeops.network/SymbolBlack.svg" alt="" />
+    Built with CreateOS
+  </a>
+
+</body>
+</html>
